@@ -51,7 +51,8 @@ def caesar(dir, txt, shft):
     print(f"The {direction}d value is {results}")
 
 
-switch = True;
+switch = True
+
 while switch:
     direction = input("Type 'encode' to encrypt, type 'decode' to decrypt:\n")
     text = input("Type your message:\n").lower()

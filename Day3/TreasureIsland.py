@@ -36,7 +36,7 @@ if(option == 'left'):
     if(option == 'wait'):
         option = input(
             "You arrive at the island unharmed. There is a house with 3 doors. One red, one yellow and one blue. Which colour do you choose? ")
-        if(option == 'red'):
+        if option == 'red':
             print("It's a room full of fire. Game Over.")
         elif(option == 'blue'):
             print("You enter a room of beasts. Game Over.")
