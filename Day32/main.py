@@ -1,11 +1,11 @@
 import random
-import smtplib, ssl
+import smtplib
 import datetime as dt
 import pandas as pd
 from dotenv import dotenv_values
 from email.message import EmailMessage
 
-# get all the letter templates and store it in an array
+
 config = dotenv_values(".env")
 
 
