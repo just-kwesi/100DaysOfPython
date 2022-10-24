@@ -1,8 +1,9 @@
 import random
-import smtplib,ssl
+import smtplib, ssl
 import datetime as dt
 import pandas as pd
 from dotenv import dotenv_values
+from email.message import EmailMessage
 
 # get all the letter templates and store it in an array
 config = dotenv_values(".env")
@@ -11,7 +12,7 @@ config = dotenv_values(".env")
 def get_letter(name):
     birthday_wishes = []
 
-    with open("./letter_templates/letter_1.txt") as letter_one:
+    with open("letter_templates/letter_1.txt") as letter_one:
         birthday_mail = letter_one.read()
         birthday_wishes.append(birthday_mail)
 
@@ -24,16 +25,20 @@ def get_letter(name):
 def send_letter(letter_to_send, person):
     my_email = config['EMAIL']
     password = config["PASSWORD"]
-    print(my_email)
-    # context = ssl.create_default_context()
 
-    with smtplib.SMTP(config["SMTP_SERVER_GMAIL"]) as connection:
+    em = EmailMessage()
+    em['From'] = my_email
+    em['To'] = person["email"]
+    em['Subject'] = "Birthday Wishes"
+    em.set_content(letter_to_send)
+
+    with smtplib.SMTP("smtp.gmail.com",587) as connection:
         connection.starttls()
         connection.login(user=my_email, password=password)
         connection.sendmail(
             from_addr=my_email,
             to_addrs=person["email"],
-            msg=f"Subject:Birthday Wishes\n\n{letter_to_send}"
+            msg=em.as_string()
         )
 
 
