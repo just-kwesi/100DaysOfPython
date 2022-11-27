@@ -1,16 +1,13 @@
 import requests
-from dotenv import dotenv_values
-
-CONFIG = dotenv_values('.env')
 
 
 class DataManager:
     # This class is responsible for talking to the Google Sheet.
-    def __init__(self):
+    def __init__(self, config):
         self.flights = []
         self.URL = "https://api.sheety.co/c1a1a1c435cf5e09284c0a35de9c44b1/flightDeals/prices"
         self.request_header = {
-            "Authorization": CONFIG["SHETTY_AUTH"]
+            "Authorization": config["SHETTY_AUTH"]
         }
 
     def getFlight(self):
@@ -36,7 +33,7 @@ class DataManager:
     def updateFlight(self, flight_id, flight_obj):
         put_url = f"{self.URL}/{flight_id}"
         requests_body = {
-            "price" : flight_obj
+            "price": flight_obj
         }
 
         response = requests.put(put_url, headers=self.request_header, json=requests_body)

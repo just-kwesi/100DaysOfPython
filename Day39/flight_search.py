@@ -1,15 +1,12 @@
 import requests
-from dotenv import dotenv_values
-
-CONFIG = dotenv_values('.env')
 
 
 class FlightSearch:
     # This class is responsible for talking to the Flight Search API.
-    def __init__(self):
+    def __init__(self, config):
         self.URL = "https://api.tequila.kiwi.com/locations/query"
         self.request_header = {
-            "apikey": CONFIG["KIWI_API_KEY"]
+            "apikey": config["KIWI_API_KEY"]
         }
 
     def getIataCode(self, city):
