@@ -16,7 +16,7 @@ flight_srch = FlightSearch(CONFIG)
 flight_price = FlightData(CONFIG)
 
 # get rows of locations from Google sheets using sheety.com
-sheet_data = data.getFlight()
+sheet_data = data.getFlight().flights
 
 # confirm all rows include IATA codes
 for flight_row in sheet_data:
@@ -26,9 +26,18 @@ for flight_row in sheet_data:
         flight_row["iataCode"] = iataCode[0]["code"]  # update row to include IATA code
         status = data.updateFlight(flight_id, flight_row)  # send a put request to update hoogle sheet
 
-
 # iterate for flight prices and send sms if lesser than sheets prices
+
 for loc in sheet_data:
-    flights = flight_price.getPrices(loc)
-    if flights and len(flight_price.flights):
+    layovers = 0
+    flights = flight_price.getPrices(loc, layovers)
+    cheap_flights = len(flight_price.flights)
+
+    if flights and cheap_flights == 0:
+        layovers += 2
+        flights = flight_price.getPrices(loc, layovers)
+
+    if flights and cheap_flights:
         send_notification.sendMessages(flight_price.flights)
+        emails = data.getUsers().users
+        send_notification.sendEmails(emails=emails, flight=flight_price.flights[0])

@@ -11,7 +11,7 @@ class FlightData:
         }
         self.flights = []
 
-    def getPrices(self, destination):
+    def getPrices(self, destination, stop_overs):
         today = dt.datetime.today()
         tomorrow = today + dt.timedelta(days=1)
         six_months_from_tomorrow = today + dt.timedelta(days=(6 * 31))
@@ -24,14 +24,15 @@ class FlightData:
             "nights_in_dst_from": 4,
             "nights_in_dst_to": 14,
             "curr": "USD",
-            "limit": 10
-
+            "limit": 10,
+            "max_stopovers": stop_overs
         }
 
         response = requests.get(self.URL, headers=self.request_header, params=request_params)
         response.raise_for_status()
-        if response.status_code == 200:
-            flights = response.json()['data']
+        flights = response.json()['data']
+
+        if len(flights):
             self.checkForCheapFlight(flights, destination["lowestPrice"])
             return True
         return False
