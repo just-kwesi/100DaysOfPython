@@ -148,3 +148,4 @@ cython_debug/
 
 #custom files
 passwords.json
+.vscode/
